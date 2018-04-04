@@ -98,7 +98,7 @@ const routes: Hapi.ServerRoute[] = [
 				throw Boom.badData("Missing work_blob.");
 			}
 
-			await finish_work(work_blob);
+			await finish_work(query.work_blob);
 
 			return {"status": "ok"};
 		}

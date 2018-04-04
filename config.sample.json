@@ -15,6 +15,7 @@
 		"database": "0"
 	},
 	"secret": "secret_here",
+	"worker_secret": "different_secret_here",
 	"server": {
 		"host": "127.0.0.1",
 		"port": 3000

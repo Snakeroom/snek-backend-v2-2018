@@ -1,35 +1,10 @@
 import Hapi from "hapi";
 import * as Joi from "joi";
 import Boom from "boom";
-import r, { conn } from "../db";
+import r, { conn, redis_client } from "../db";
 import * as reddit from "../auth/reddit";
 
 const joinCircle = async (id: string, key: string) => {
-	const voteChunk = () => {
-		let i = 0;
-
-		for (let token of chunks[curChunk]) {
-			setTimeout(() => {
-				reddit.checkToken(token).then(newToken => {
-					token = newToken;
-					return reddit.guessKey(token, id, key).then(() => {
-						return reddit.circleVote(token, id, 1).then(() => {
-							return r
-								.table("users")
-								.filter({ accessToken: token })
-								.update({
-									assimilations: r.row("views").default(0).add(1)
-								})
-								.run(conn);
-						});
-					});
-				}).catch(() => {});
-			}, 4000 * i);
-
-			i++;
-		}
-	};
-
 	const tokens = await r
 		.table("users")
 		.withFields("accessToken")
@@ -38,7 +13,15 @@ const joinCircle = async (id: string, key: string) => {
 
 	const chunks = tokens.map(info => info.accessToken);
 	let curChunk = 0;
-	voteChunk();
+
+	for (let token of chunks[curChunk]) {
+		let work = {
+			sub_id: id,
+			key: key,
+			token: token
+		};
+		await redis_client.saddAsync("snakeworker:queue", JSON.stringify(work));
+	}
 };
 
 const addAdmin = (name: string) => {

@@ -18,6 +18,7 @@ interface Config {
 		database: string;
 	};
 	secret: string;
+	worker_secret: string;
 	server: {
 		host: string;
 		port?: number;

@@ -22,7 +22,12 @@ export const init = () => {
 	});
 };
 
-export const redis_client = redis.createClient();
+export const redis_client = redis.createClient({
+	host: config.redis.host,
+	port: config.redis.port,
+	db: config.redis.database
+});
+
 redis_client.on("error", function (err) {
     console.log("[Redis:ERR] " + err);
 });

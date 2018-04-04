@@ -4,7 +4,8 @@
   "license": "MIT",
   "version": "0.0.0",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "worker": "ts-node src/worker.ts"
   },
   "dependencies": {
     "@types/boom": "7.2.0",

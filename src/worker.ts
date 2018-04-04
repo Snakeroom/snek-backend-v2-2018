@@ -7,7 +7,7 @@ console.log(`Worker started up on ${(new Date()).toString()}.`);
 
 const getWork = async () => {
 	// XXX: config server host how
-	fetch("http://localhost:3000/worker/get_work", {
+	fetch("http://localhost:3000/worker/work", {
 		method: "GET",
 		body: qs.stringify({
 			auth: config.worker_secret
@@ -30,8 +30,8 @@ const submitWork = (work: object, success: boolean) => {
 	let work_blob = JSON.stringify(work);
 
 	// XXX: config server host how
-	fetch("http://localhost:3000/worker/finish_work", {
-		method: "GET",
+	fetch("http://localhost:3000/worker/work", {
+		method: "POST",
 		body: qs.stringify({
 			auth: config.worker_secret,
 			work_blob: work_blob,

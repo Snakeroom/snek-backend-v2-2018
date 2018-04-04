@@ -65,7 +65,7 @@ const finish_work = async (work_blob: string) {
 const routes: Hapi.ServerRoute[] = [
 	{
 		method: "GET",
-		path: "/worker/get_work",
+		path: "/worker/work",
 		async handler(_, h) {
 			const query = req.query as Hapi.RequestQuery;
 			if (!query.auth) {
@@ -82,10 +82,10 @@ const routes: Hapi.ServerRoute[] = [
 		}
 	},
 	{
-		method: "GET",
-		path: "/worker/finish_work",
+		method: "POST",
+		path: "/worker/work",
 		async handler(_, h) {
-			const query = req.query as Hapi.RequestQuery;
+			const query = req.payload as any;
 			if (!query.auth) {
 				throw Boom.unauthorized("Missing worker auth key.");
 			}

@@ -1,34 +1,32 @@
 import Hapi from "hapi";
 import * as Joi from "joi";
 import Boom from "boom";
-import chunk from "lodash.chunk";
 import r, { conn } from "../db";
 import * as reddit from "../auth/reddit";
 
 const joinCircle = async (id: string, key: string) => {
 	const voteChunk = () => {
-		for (let _token of chunks[curChunk]) {
-			let token = _token;
-			reddit.checkToken(token).then(newToken => {
-				token = newToken;
-				return reddit.guessKey(token, id, key).then(() => {
-					return reddit.circleVote(token, id, 1).then(() => {
-						return r
-							.table("users")
-							.filter({ accessToken: token })
-							.update({
-								assimilations: r.row("views").default(0).add(1)
-							})
-							.run(conn);
+		let i = 0;
+
+		for (let token of chunks[curChunk]) {
+			setTimeout(() => {
+				reddit.checkToken(token).then(newToken => {
+					token = newToken;
+					return reddit.guessKey(token, id, key).then(() => {
+						return reddit.circleVote(token, id, 1).then(() => {
+							return r
+								.table("users")
+								.filter({ accessToken: token })
+								.update({
+									assimilations: r.row("views").default(0).add(1)
+								})
+								.run(conn);
+						});
 					});
-				});
-			}).catch(() => {});
-		}
+				}).catch(() => {});
+			}, 4000 * i);
 
-		curChunk++;
-
-		if (curChunk < chunks.length) {
-			setTimeout(voteChunk, 60 * 1000);
+			i++;
 		}
 	};
 
@@ -38,7 +36,7 @@ const joinCircle = async (id: string, key: string) => {
 		.run(conn)
 		.then(c => c.toArray());
 
-	const chunks = chunk(tokens.map(info => info.accessToken), 60);
+	const chunks = tokens.map(info => info.accessToken);
 	let curChunk = 0;
 	voteChunk();
 };

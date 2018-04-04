@@ -19,15 +19,16 @@ const routes: Hapi.ServerRoute[] = [
 				if (!creds.scope.includes("admin")) {
 					hasRequested = !!await r
 						.table("requests")
-						.get((req.auth.credentials as any).user.name)
+						.get(creds.user.name)
 						.run(conn);
 				}
 
-				assimilations = (await r
-					.table("users")
-					.filter({ name: creds.user.name })
-					.nth(0)
-					.run(conn)).assimilations || 0;
+				assimilations =
+					(await r
+						.table("users")
+						.filter({ name: creds.user.name })
+						.nth(0)
+						.run(conn)).assimilations || 0;
 			}
 
 			return h.view("index.html", {
@@ -59,12 +60,17 @@ const routes: Hapi.ServerRoute[] = [
 		method: "POST",
 		path: "/request-circle",
 		async handler(req, h) {
+			const creds = req.auth.credentials as any;
+			if (creds.user.assimilations < 5 && !creds.scope.includes("admin")) {
+				throw Boom.unauthorized("not enough assimilations");
+			}
+
 			const { url, key } = req.payload as any;
 			const id = "t3_" + url.match(ID_REGEX)[1];
 
 			if (
 				!await guessKey(
-					(req.auth.credentials as any).user.accessToken,
+					creds.user.accessToken,
 					id,
 					key
 				)
@@ -75,12 +81,12 @@ const routes: Hapi.ServerRoute[] = [
 				.table("requests")
 				.insert(
 					{
-						name: (req.auth.credentials as any).user.name,
+						name: creds.user.name,
 						id,
 						key
 					},
 					{
-						conflict: (req.auth.credentials as any).scope.includes(
+						conflict: creds.scope.includes(
 							"admin"
 						)
 							? "replace"

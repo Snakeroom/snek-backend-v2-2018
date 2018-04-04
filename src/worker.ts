@@ -54,10 +54,12 @@ const doWork = () => {
 		reddit.circleVote(work.token, work.sub_id, 1).then(() => {
 			work.success = true;
 			await submitWork(JSON.stringify(work));
-		}).catch(() => {
+		}).catch((e) => {
+			console.error(e);
 			await submitWork(JSON.stringify(work));
 		});
-	}).catch(() => {
+	}).catch((e) => {
+		console.error(e);
 		await submitWork(JSON.stringify(work));
 	});;
 

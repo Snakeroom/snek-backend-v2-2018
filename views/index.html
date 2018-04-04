@@ -39,7 +39,7 @@
 
 			<p class="message">You've assimilated {{ assimilations }} Circles so far.</p>
 
-			{% if assimilations >= 5 and not hasRequested %}
+			{% if (assimilations >= 5 and not hasRequested) or admin %}
 			<h2>Submit A Circle</h2>
 
 			<form action="/request-circle" class="form" enctype="application/x-www-form-urlencoded" method="POST">

@@ -27,7 +27,7 @@ const getHeaders = (accessToken?: string): { [key: string]: string } => {
 		"Content-Type": "application/x-www-form-urlencoded",
 		"User-Agent": "sneknet v1.0.0"
 	};
-	if (accessToken) headers["Authorization"] = "bearer " + accessToken;
+	if (accessToken) headers["Authorization"] = "Bearer " + accessToken;
 
 	return headers;
 };
@@ -70,7 +70,7 @@ export const circleVote = async (
 	};
 
 	return fetch(
-		`https://oauth.reddit.com/api/circle_vote.json?${qs.stringify(body)}`,
+		`https://oauth.reddit.com/api/circle_vote.json?` + qs.stringify(body),
 		{
 			method: "POST",
 			headers: getHeaders(accessToken),

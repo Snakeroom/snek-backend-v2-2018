@@ -75,6 +75,12 @@ const start = async () => {
 		path: "../views"
 	});
 
+	server.events.on("log", (e, tags: any) => {
+		if (tags.error) {
+			console.error(`Server error: ${e.error ? (e.error as any).message : "unknown"}`);
+		}
+	});
+
 	server.route(routes());
 	// TODO: server.ext("onPreResponse", errorHandler);
 

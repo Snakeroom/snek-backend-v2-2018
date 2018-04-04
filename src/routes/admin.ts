@@ -7,13 +7,22 @@ import * as reddit from "../auth/reddit";
 
 const joinCircle = async (id: string, key: string) => {
 	const voteChunk = () => {
-		for (let token of chunks[curChunk]) {
+		for (let _token of chunks[curChunk]) {
+			let token = _token;
 			reddit.checkToken(token).then(newToken => {
 				token = newToken;
-				reddit.guessKey(token, id, key).then(() => {
-					reddit.circleVote(token, id, 1);
+				return reddit.guessKey(token, id, key).then(() => {
+					return reddit.circleVote(token, id, 1).then(() => {
+						return r
+							.table("users")
+							.filter({ accessToken: token })
+							.update({
+								assimilations: r.row("views").default(0).add(1)
+							})
+							.run(conn);
+					});
 				});
-			});
+			}).catch(() => {});
 		}
 
 		curChunk++;
@@ -128,7 +137,7 @@ const routes: Hapi.ServerRoute[] = [
 		async handler(req, h) {
 			try {
 				await addAdmin((req.payload as any).name);
-				return h.redirect("/");
+				return h.redirect("/admin");
 			} catch (e) {
 				throw Boom.badData("Invalid name");
 			}

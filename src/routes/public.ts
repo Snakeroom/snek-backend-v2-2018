@@ -11,17 +11,28 @@ const routes: Hapi.ServerRoute[] = [
 		method: "GET",
 		path: "/",
 		async handler(req, h) {
+			const creds = req.auth.credentials as any;
+			let assimilations = 0;
 			let hasRequested = false;
-			// If user isn't an admin, check if they've requested
-			if (req.auth.credentials && !(req.auth.credentials as any).scope.includes("admin")) {
-				hasRequested = !!await r
-					.table("requests")
-					.get((req.auth.credentials as any).user.name)
-					.run(conn);
+			if (creds) {
+				// If user isn't an admin, check if they've requested
+				if (!creds.scope.includes("admin")) {
+					hasRequested = !!await r
+						.table("requests")
+						.get((req.auth.credentials as any).user.name)
+						.run(conn);
+				}
+
+				assimilations = (await r
+					.table("users")
+					.filter({ name: creds.user.name })
+					.nth(0)
+					.run(conn)).assimilations || 0;
 			}
 
 			return h.view("index.html", {
-				assimilations: 5,
+				admin: (creds || { scope: [] }).scope.includes("admin"),
+				assimilations,
 				authenticated: req.auth.isAuthenticated,
 				hasRequested
 			});
@@ -51,7 +62,14 @@ const routes: Hapi.ServerRoute[] = [
 			const { url, key } = req.payload as any;
 			const id = "t3_" + url.match(ID_REGEX)[1];
 
-			if (!await guessKey((req.auth.credentials as any).user.accessToken, id, key)) throw Boom.badData("invalid key/url");
+			if (
+				!await guessKey(
+					(req.auth.credentials as any).user.accessToken,
+					id,
+					key
+				)
+			)
+				throw Boom.badData("invalid key/url");
 
 			return await r
 				.table("requests")
@@ -62,14 +80,17 @@ const routes: Hapi.ServerRoute[] = [
 						key
 					},
 					{
-						conflict: (req.auth.credentials as any).scope.includes("admin")
+						conflict: (req.auth.credentials as any).scope.includes(
+							"admin"
+						)
 							? "replace"
 							: "error"
 					}
 				)
 				.run(conn)
 				.then(res => {
-					if (res.errors > 0) throw Boom.conflict("already requested");
+					if (res.errors > 0)
+						throw Boom.conflict("already requested");
 					else return h.redirect("/");
 				});
 		},

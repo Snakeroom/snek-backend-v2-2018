@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "downlevelIteration": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es2015",
+
+        "outDir": "./dist",
+		"sourceMap": true,
+
+        "lib": [
+            "dom",
+            "es2017"
+		],
+
+		"strict": true,
+
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+
+        "esModuleInterop": true,
+        "experimentalDecorators": true
+    },
+
+	"files": [
+		"./src/index.ts"
+	],
+	"include": [
+		"./src/definitions/**/*"
+	],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

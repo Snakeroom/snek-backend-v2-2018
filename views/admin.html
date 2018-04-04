@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Sneknet - Admin</title>
+
+		<link href="/assets/css/index.css" rel="stylesheet" />
+
+		<meta name="description" content="🐍 sneknet! 🐍" />
+		<meta property="og:image" content="https://snektective.github.io/assets/img/snek.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body>
+		<div class="center-screen">
+			<p class="message">Current users: {{ amtUsers }}</p>
+
+			<br />
+
+			<form action="/admin/add" enctype="application/x-www-form-urlencoded" method="POST">
+				<input name="name" placeholder="Username">
+				<input type="submit" value="Add Admin">
+			</form>
+
+			<br />
+
+			<div class="buttons">
+				<a href="/admin/requests">Requests</a>
+			</div>
+		</div>
+	</body>
+
+</html>

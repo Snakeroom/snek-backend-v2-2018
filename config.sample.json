@@ -1,0 +1,22 @@
+{
+	"database": {
+		"host": "127.0.0.1",
+		"port": 28015,
+		"db": "sneknet"
+	},
+	"reddit": {
+		"clientId": "",
+		"clientSecret": "",
+		"redirectUri": "http://localhost:3000/auth/reddit/callback"
+	},
+	"redis": {
+		"host": "127.0.0.1",
+		"port": "6379",
+		"database": "0"
+	},
+	"secret": "secret_here",
+	"server": {
+		"host": "127.0.0.1",
+		"port": 3000
+	}
+}

@@ -1,0 +1,25 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch Program",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceRoot}/src/index.ts",
+			"cwd": "${workspaceRoot}/server",
+			"outFiles": ["${workspaceRoot}/dist/**/*"],
+			"sourceMaps": true,
+			"env": {
+				"PORT": "3001"
+			}
+		},
+		{
+			"name": "Attach to Process",
+			"type": "node",
+			"request": "attach",
+			"port": 9229,
+			"outFiles": ["${workspaceRoot}/dist/**/*"],
+			"sourceMaps": true
+		}
+	]
+}

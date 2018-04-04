@@ -1,0 +1,135 @@
+body {
+	width: 100%;
+	height: 100%;
+	background-color: #222;
+	overflow-x: hidden;
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0 5px;
+	box-sizing: border-box;
+}
+
+.center-screen {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	min-height: 100vh;
+	color: #fff;
+}
+
+.center-screen h4 {
+	margin: 3px 0;
+}
+
+.center-screen p {
+	margin: 0;
+	/* margin-bottom: 40px; */
+}
+
+abbr {
+	text-decoration: none;
+	color: #FFF;
+}
+
+.mild-fade {
+	color: #bbb;
+}
+
+.form {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	margin-top: 10px;
+}
+
+.form input {
+	background-color: white;
+	border: 1px solid gray;
+	border-radius: 5px;
+	padding: 5px;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.form input[type="submit"] {
+	width: inherit;
+	float: right;
+}
+
+.buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.buttons a {
+	display: block;
+	padding: 10px 20px;
+	margin: 5px;
+	background: #fdfdfd;
+	color: #0074d9;
+	border-radius: 3px;
+	font-size: 14px;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background-color .2s;
+	box-sizing: border-box;
+}
+
+.buttons a:hover {
+	background-color: #cdcdcd;
+	color: #0074d9;
+}
+
+.buttons a {
+	margin-right: 5px;
+}
+
+.hidden {
+	display: none;
+}
+
+.buttons svg {
+	height: 22px;
+	vertical-align: middle;
+	margin-left: -2px;
+	margin-right: 2px;
+	fill: #0074d9;
+}
+
+.message {
+	font-weight: bold;
+}
+
+.footer {
+	color: #555;
+	text-align: center;
+	width: 100%;
+	font-size: 12px;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+a:hover {
+	color: #999;
+}
+
+br.break {
+	margin: 20px 0;
+}
+
+@media (max-width: 600px) {
+	.buttons .auth {
+		display: block;
+		margin: 5px 0;
+	}
+
+	br.break {
+		margin: 7px 0;
+	}
+}

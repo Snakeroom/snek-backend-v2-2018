@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Sneknet - Requests</title>
+
+		<link href="/assets/css/index.css" rel="stylesheet" />
+
+		<style>
+			table {
+				border-collapse: collapse;
+				color: #000;
+				text-align: left;
+				width: 100%;
+			}
+
+			table td,
+			table th {
+				border: 1px solid #ddd;
+				padding: 8px;
+			}
+
+			table tr:nth-child(even) {
+				background-color: #f7f7f7;
+			}
+
+			table th {
+				background-color: rgb(112, 112, 112);
+				color: white;
+			}
+
+			a {
+				text-decoration: none;
+			}
+
+			a:visited {
+				color: rgb(0, 0, 238);
+			}
+
+			.center-screen {
+				justify-content: normal;
+			}
+
+		</style>
+
+		<meta name="description" content="🐍 sneknet! 🐍" />
+		<meta property="og:image" content="https://snektective.github.io/assets/img/snek.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body>
+		<div class="center-screen">
+			<table>
+				<tr>
+					<th>Username</th>
+					<th>Secret Key</th>
+					<th>Post ID</th>
+					<th>Approve</th>
+					<th>Deny</th>
+				</tr>
+				{% for request in requests %}
+				<tr>
+					<td>
+						<a href="https://reddit.com/u/{{ request.name }}">
+							{{ request.name }}
+						</a>
+					</td>
+					<td>{{ request.key }}</td>
+					<td>
+						<a href="https://redd.it/{{ request.id | replace("t3_", "") }}">{{ request.id }}</a>
+					</td>
+					<td>
+						<form enctype="application/x-www-form-urlencoded" method="POST">
+							<input type="hidden" name="action" value="approve">
+							<input type="hidden" name="name" value="{{ request.name }}">
+							<input type="submit" value="Approve">
+						</form>
+					</td>
+					<td>
+						<form enctype="application/x-www-form-urlencoded" method="POST">
+							<input type="hidden" name="action" value="deny">
+							<input type="hidden" name="name" value="{{ request.name }}">
+							<input type="submit" value="Deny">
+						</form>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</body>
+
+</html>

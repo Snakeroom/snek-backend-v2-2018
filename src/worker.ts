@@ -24,7 +24,11 @@ const getWork = async () => {
 		});
 }
 
-const submitWork = (work_blob: string, success: boolean) => {
+const submitWork = (work: object, success: boolean) => {
+	// Add the success flag and zip it up for shipping.
+	work.success = success;
+	let work_blob = JSON.stringify(work);
+
 	// XXX: config server host how
 	fetch("http://localhost:3000/worker/finish_work", {
 		method: "GET",
@@ -47,23 +51,27 @@ const submitWork = (work_blob: string, success: boolean) => {
 
 const doWork = () => {
 	let work = getWork();
-	work.success = false;
+
+	// Wait more if there is no work for us.
+	if (!work) {
+		setTimeout(doWork, 6000);
+		return;
+	}
 
 	// XXX: Handle errors
 	reddit.guessKey(work.token, work.sub_id, work.key).then(() => {
 		reddit.circleVote(work.token, work.sub_id, 1).then(() => {
-			work.success = true;
-			await submitWork(JSON.stringify(work));
+			await submitWork(work, true);
 		}).catch((e) => {
 			console.error(e);
-			await submitWork(JSON.stringify(work));
+			await submitWork(work, false);
 		});
 	}).catch((e) => {
 		console.error(e);
-		await submitWork(JSON.stringify(work));
-	});;
+		await submitWork(work, false);
+	});
 
-	// Start the loop again.
+	// Two seconds because reddit rate limits.
 	setTimeout(doWork, 2000);
 }
 
